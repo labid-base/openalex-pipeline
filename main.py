@@ -12,7 +12,6 @@ def fetch_works(mailto: str, year: int, month: int | None = None, chunk_size: in
     chunk_index = 1
     current_chunk = []
 
-    # Build filter
     filters = [f"publication_year:{year}", "has_raw_affiliation_strings:true"]
 
     if month is not None:
@@ -28,7 +27,7 @@ def fetch_works(mailto: str, year: int, month: int | None = None, chunk_size: in
     filter_str = ",".join(filters)
     os.makedirs(output_dir, exist_ok=True)
 
-    print(f"Çekiliyor: year={year}" + (f", month={month:02d}" if month else "") + f"  →  filter: {filter_str}\n")
+    print(f"Fetching: year={year}" + (f", month={month:02d}" if month else "") + f"  →  filter: {filter_str}\n")
 
     while cursor:
         response = requests.get(base_url, params={
@@ -50,12 +49,12 @@ def fetch_works(mailto: str, year: int, month: int | None = None, chunk_size: in
                 with open(filename, "w", encoding="utf-8") as f:
                     for w in current_chunk:
                         f.write(json.dumps(w) + "\n")
-                print(f"Kaydedildi: {filename}")
+                print(f"Saved: {filename}")
                 chunk_index += 1
                 current_chunk = []
 
         total += len(results)
-        print(f"Çekildi: {total}")
+        print(f"Fetched: {total}")
         cursor = data.get("meta", {}).get("next_cursor")
 
     if current_chunk:
@@ -63,18 +62,18 @@ def fetch_works(mailto: str, year: int, month: int | None = None, chunk_size: in
         with open(filename, "w", encoding="utf-8") as f:
             for w in current_chunk:
                 f.write(json.dumps(w) + "\n")
-        print(f"Kaydedildi: {filename}")
+        print(f"Saved: {filename}")
 
-    print(f"\nTamamlandı. Toplam: {total} work")
+    print(f"\nDone. Total: {total} works")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="OpenAlex work fetcher")
-    parser.add_argument("--mailto",     required=True,       help="Polite pool e-mail (örn: emirhan@unige.ch)")
-    parser.add_argument("--year",       required=True,       type=int, help="Yayın yılı (örn: 2025)")
-    parser.add_argument("--month",      default=None,        type=int, help="Yayın ayı 1-12 (opsiyonel)")
-    parser.add_argument("--chunk-size", default=10000,       type=int, help="Chunk başına kayıt sayısı")
-    parser.add_argument("--output-dir", default=".",                   help="Çıktı klasörü")
+    parser = argparse.ArgumentParser(description="Fetch works from OpenAlex")
+    parser.add_argument("--mailto",     required=True,  help="Polite pool email (e.g. emirhan@unige.ch)")
+    parser.add_argument("--year",       required=True,  type=int, help="Publication year (e.g. 2025)")
+    parser.add_argument("--month",      default=None,   type=int, help="Publication month 1-12 (optional)")
+    parser.add_argument("--chunk-size", default=10000,  type=int, help="Records per chunk file")
+    parser.add_argument("--output-dir", default=".",              help="Output directory")
     args = parser.parse_args()
 
     fetch_works(

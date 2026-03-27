@@ -1,8 +1,8 @@
 # openalex-pipeline
 
-OpenAlex'ten ham affiliation verisi çeken ve AffilGood'a hazır CSV formatına dönüştüren pipeline.
+Fetches raw affiliation data from OpenAlex and converts it to CSV format for AffilGood input.
 
-## Akış
+## Pipeline
 
 ```
 main.py  →  works_YYYY_MM_chunk_XXXX.jsonl
@@ -12,37 +12,48 @@ convert_to_csv.py  →  works_YYYY_MM_chunk_XXXX.csv
 AffilGood
 ```
 
-## Kullanım
+## Usage
 
-### 1. Ham veri çekme
+### 1. Fetch works
 
 ```bash
-# Tüm yıl
+# Full year
 python main.py --mailto emirhan@unige.ch --year 2025 --output-dir data/jsonl
 
-# Tek ay
+# Single month
 python main.py --mailto emirhan@unige.ch --year 2025 --month 3 --output-dir data/jsonl
 ```
 
-### 2. CSV'ye dönüştürme
+### 2. Convert to CSV
 
 ```bash
 python convert_to_csv.py --input-dir data/jsonl --output-dir data/csv
 ```
 
-## Çıktı
+## Output columns
 
-Her CSV satırı bir `raw_affiliation_string`'e karşılık gelir. Sütunlar:
+Each CSV row corresponds to one `raw_affiliation_string`. Columns:
 
-| Sütun | Açıklama |
-|-------|----------|
+| Column | Description |
+|--------|-------------|
 | `work_id` | OpenAlex work ID |
-| `raw_affiliation_string` | Ham affiliation string (AffilGood input) |
-| `institution_ids` | OpenAlex kurum ID'leri |
-| `institution_names` | OpenAlex kurum isimleri |
-| `language` | Yayın dili |
-| `primary_topic_name` | Birincil konu |
+| `doi` | DOI |
+| `title` | Paper title |
+| `type` | Publication type (article, preprint, etc.) |
+| `language` | Publication language |
+| `primary_topic_id` | Primary topic ID |
+| `primary_topic_name` | Primary topic name |
+| `cited_by_count` | Citation count |
+| `author_position` | first / middle / last |
+| `author_id` | OpenAlex author ID |
+| `author_orcid` | Author ORCID (if available) |
+| `author_name` | Author name |
+| `is_corresponding` | Corresponding author flag |
+| `raw_affiliation_string` | Raw affiliation string (AffilGood input) |
+| `institution_ids` | OpenAlex institution IDs |
+| `institution_names` | OpenAlex institution names |
+| `country_codes` | Country codes |
 
-## Not
+## Notes
 
-Veri dosyaları (`.jsonl`, `.csv`) `.gitignore` kapsamındadır, repoya push edilmez.
+Data files (`.jsonl`, `.csv`) are excluded from version control via `.gitignore`.

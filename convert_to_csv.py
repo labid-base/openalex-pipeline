@@ -32,14 +32,14 @@ def extract_rows(work):
 
     topic = work.get("primary_topic") or {}
     base = {
-        "work_id":             work.get("id", ""),
-        "doi":                 work.get("doi", ""),
-        "title":               work.get("title", ""),
-        "type":                work.get("type", ""),
-        "language":            work.get("language", ""),
-        "primary_topic_id":    topic.get("id", ""),
-        "primary_topic_name":  topic.get("display_name", ""),
-        "cited_by_count":      work.get("cited_by_count", 0),
+        "work_id":            work.get("id", ""),
+        "doi":                work.get("doi", ""),
+        "title":              work.get("title", ""),
+        "type":               work.get("type", ""),
+        "language":           work.get("language", ""),
+        "primary_topic_id":   topic.get("id", ""),
+        "primary_topic_name": topic.get("display_name", ""),
+        "cited_by_count":     work.get("cited_by_count", 0),
     }
 
     for authorship in work.get("authorships", []):
@@ -121,7 +121,7 @@ def main(input_dir, output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
     input_files = sorted(glob.glob(os.path.join(input_dir, "works_*_chunk_*.jsonl")))
-    print(f"{len(input_files)} chunk bulundu.\n")
+    print(f"{len(input_files)} chunk(s) found.\n")
 
     grand_total = grand_filtered = grand_rows = 0
 
@@ -130,23 +130,23 @@ def main(input_dir, output_dir):
         output_path = os.path.join(output_dir, chunk_name)
 
         total, filtered, rows = process_chunk(input_path, output_path)
-        grand_total   += total
+        grand_total    += total
         grand_filtered += filtered
         grand_rows     += rows
 
-        print(f"{chunk_name}: {total} work → {filtered} filtrelendi → {rows} satır yazıldı")
+        print(f"{chunk_name}: {total} works → {filtered} filtered → {rows} rows written")
 
-    print(f"\nTamamlandı.")
-    print(f"  Toplam work    : {grand_total:,}")
-    print(f"  Filtrelenen    : {grand_filtered:,} (cited_by_count > {CITATION_THRESHOLD})")
-    print(f"  Yazılan satır  : {grand_rows:,}")
-    print(f"  Çıktı klasörü  : {output_dir}")
+    print(f"\nDone.")
+    print(f"  Total works    : {grand_total:,}")
+    print(f"  Filtered out   : {grand_filtered:,} (cited_by_count > {CITATION_THRESHOLD})")
+    print(f"  Rows written   : {grand_rows:,}")
+    print(f"  Output dir     : {output_dir}")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="JSONL chunk'larını CSV'ye dönüştür")
-    parser.add_argument("--input-dir",  required=True, help="JSONL chunk klasörü")
-    parser.add_argument("--output-dir", required=True, help="CSV çıktı klasörü")
+    parser = argparse.ArgumentParser(description="Convert JSONL chunks to CSV")
+    parser.add_argument("--input-dir",  required=True, help="Directory containing JSONL chunks")
+    parser.add_argument("--output-dir", required=True, help="Output directory for CSV files")
     args = parser.parse_args()
 
     main(args.input_dir, args.output_dir)
