@@ -1,0 +1,5 @@
+*.jsonl
+*.csv
+__pycache__/
+*.pyc
+.env
