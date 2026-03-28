@@ -43,12 +43,12 @@ OpenAlex_Affilation_Dataset/2025-12-affilgood/
              institutions | subunits | location_city | location_country |
              language | confidence
 
-    ↓  LabNER/scripts/extract_lab_spans.py  (regex keyword filter)
-OpenAlex_Affilation_Dataset/2025-12-affilgood/
-    lab_spans.csv
+    ↓  LabNER/scripts/extract_spans_for_annotation.py  (broad regex keyword filter)
+openalex-affiliation-dataset/2025-12-labelstudio/
+    chunk_{YYYY}_{MM}_{XXXX}.csv
     columns: work_id | raw_text | span_input | institutions | subunits
 
-    ↓  Label Studio (LabNER project) — import lab_spans.csv directly
+    ↓  Label Studio (LabNER project) — import CSV directly
     ↓  Manual annotation: LAB / CENTER on span_input
     ↓  Fine-tune LabNER model (transfer learning from AffilGood weights)
 ```
@@ -103,19 +103,19 @@ AffilGood runs two models internally:
 - **Span model** (`affilgood-span-multilingual-v2`) — splits the raw string into sub-affiliation units
 - **NER model** (`affilgood-ner-multilingual-v2`) — labels entities (ORG, SUBORG, CITY, COUNTRY) within each span
 
-### 4. Extract lab/center spans for annotation
+### 4. Extract lab/center spans for Label Studio
 
 ```bash
-python LabNER/scripts/extract_lab_spans.py \
-  --input-csv  OpenAlex_Affilation_Dataset/2025-12-affilgood/affilgood_output.csv \
-  --output-csv OpenAlex_Affilation_Dataset/2025-12-affilgood/lab_spans.csv
+python LabNER/scripts/extract_spans_for_annotation.py \
+  --input-csv  openalex-affiliation-dataset/2025-12-affilgood/affilgood_2025_12_chunk_0001.csv \
+  --output-csv openalex-affiliation-dataset/2025-12-labelstudio/chunk_2025_12_0001.csv
 ```
 
-Filters rows where `span_input` or `subunits` matches lab/center keywords (laboratory, research group, center, institute, facility, platform, unit, ...). Output CSV is ready for direct import into Label Studio.
+Output filename convention: `chunk_{YYYY}_{MM}_{XXXX}.csv`
 
-Output columns: `work_id`, `raw_text`, `span_input`, `institutions`, `subunits`.
+Uses a broad regex covering lab/center terms in multiple languages (English, French, German, Spanish, Italian, Polish) — intentionally high recall. False positives are resolved during annotation.
 
-In Label Studio, set `span_input` as the annotatable text field. Annotators label the entity in the span as **LAB** or **CENTER**.
+Output columns: `work_id`, `raw_text`, `span_input`, `institutions`, `subunits`. Ready for direct CSV import into Label Studio. Set `span_input` as the annotatable text field and label as **LAB** or **CENTER**.
 
 ### 5. (Optional) Flatten to full authorship CSV
 
