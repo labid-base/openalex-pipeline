@@ -1,6 +1,21 @@
 # labid-base / openalex-pipeline
 
-Fetches raw academic works from the [OpenAlex](https://openalex.org) API and extracts deduplicated affiliation strings. Output is published as a Kaggle dataset.
+Fetches raw academic works from the [OpenAlex](https://openalex.org) API and extracts deduplicated affiliation strings. Output is published as an open dataset on Hugging Face.
+
+---
+
+## Dataset
+
+Collected data is published on Hugging Face:
+**[LabID-base/OpenAlex-Afillation](https://huggingface.co/datasets/LabID-base/OpenAlex-Afillation)** — 1.5M+ unique affiliation strings, updated monthly.
+
+```python
+from datasets import load_dataset
+
+ds = load_dataset("LabID-base/OpenAlex-Afillation", "2025-12")
+print(ds["train"][0])
+# {"work_id": "https://openalex.org/W...", "raw_affiliation_string": "Department of..."}
+```
 
 ---
 
@@ -56,13 +71,6 @@ python convert_to_csv.py \
 ```
 
 One row per authorship. Columns: `work_id`, `doi`, `title`, `type`, `language`, `primary_topic_id`, `primary_topic_name`, `cited_by_count`, `author_position`, `author_id`, `author_orcid`, `author_name`, `is_corresponding`, `raw_affiliation_string`, `institution_ids`, `institution_names`, `country_codes`.
-
----
-
-## Dataset
-
-Collected data is published on Kaggle:
-**[emirhanserbest/openalex-affiliation-dataset](https://www.kaggle.com/datasets/emirhanserbest/openalex-affiliation-dataset)**
 
 ---
 
