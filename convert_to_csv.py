@@ -4,8 +4,6 @@ import glob
 import os
 import argparse
 
-CITATION_THRESHOLD = 2000
-
 FIELDNAMES = [
     "work_id",
     "doi",
@@ -91,7 +89,7 @@ def extract_rows(work):
 
 
 def process_chunk(input_path, output_path):
-    total = filtered_out = written_rows = 0
+    total = written_rows = 0
 
     with open(input_path, encoding="utf-8") as infile, \
          open(output_path, "w", newline="", encoding="utf-8") as outfile:
@@ -106,15 +104,11 @@ def process_chunk(input_path, output_path):
             total += 1
             work = json.loads(line)
 
-            if work.get("cited_by_count", 0) > CITATION_THRESHOLD:
-                filtered_out += 1
-                continue
-
             rows = extract_rows(work)
             writer.writerows(rows)
             written_rows += len(rows)
 
-    return total, filtered_out, written_rows
+    return total, written_rows
 
 
 def main(input_dir, output_dir):
@@ -123,22 +117,20 @@ def main(input_dir, output_dir):
     input_files = sorted(glob.glob(os.path.join(input_dir, "works_*_chunk_*.jsonl")))
     print(f"{len(input_files)} chunk(s) found.\n")
 
-    grand_total = grand_filtered = grand_rows = 0
+    grand_total = grand_rows = 0
 
     for input_path in input_files:
         chunk_name  = os.path.basename(input_path).replace(".jsonl", ".csv")
         output_path = os.path.join(output_dir, chunk_name)
 
-        total, filtered, rows = process_chunk(input_path, output_path)
-        grand_total    += total
-        grand_filtered += filtered
-        grand_rows     += rows
+        total, rows = process_chunk(input_path, output_path)
+        grand_total += total
+        grand_rows  += rows
 
-        print(f"{chunk_name}: {total} works → {filtered} filtered → {rows} rows written")
+        print(f"{chunk_name}: {total} works → {rows} rows written")
 
     print(f"\nDone.")
     print(f"  Total works    : {grand_total:,}")
-    print(f"  Filtered out   : {grand_filtered:,} (cited_by_count > {CITATION_THRESHOLD})")
     print(f"  Rows written   : {grand_rows:,}")
     print(f"  Output dir     : {output_dir}")
 
