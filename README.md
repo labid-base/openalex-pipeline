@@ -1,6 +1,6 @@
 # labid-base / openalex-pipeline
 
-Open pipeline for building LabEL (Lab Entity Ledger) — an open knowledge graph of research laboratories. Fetches raw affiliation strings from OpenAlex, deduplicates them, runs NER via AffilGood, and prepares data for manual annotation in Label Studio.
+Open pipeline for building LabID — an open knowledge graph of research laboratories. Fetches raw affiliation strings from OpenAlex, deduplicates them, runs NER via AffilGood, and prepares data for manual annotation in Label Studio.
 
 ## Repository structure
 
