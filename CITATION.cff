@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this pipeline or its output dataset, please cite as below."
+type: software
+title: "labid-base/openalex-pipeline"
+abstract: "Open pipeline for collecting and deduplicating academic affiliation strings from OpenAlex. Part of LabID — an open knowledge graph of research laboratories."
+authors:
+  - family-names: Serbest
+    given-names: Emirhan
+    email: emirhan@unige.ch
+    orcid: ""
+repository-code: "https://github.com/labid-base/openalex-pipeline"
+license: MIT
+keywords:
+  - openalex
+  - affiliation
+  - NER
+  - named-entity-recognition
+  - research-labs
+  - knowledge-graph
+references:
+  - type: article
+    title: "OpenAlex: A fully-open index of the world's research works"
+    authors:
+      - family-names: Priem
+        given-names: Jason
+      - family-names: Piwowar
+        given-names: Heather
+      - family-names: Orr
+        given-names: Richard
+    year: 2022
+    url: "https://arxiv.org/abs/2205.01833"
