@@ -2,8 +2,6 @@
 
 Fetches raw academic works from the [OpenAlex](https://openalex.org) API and extracts deduplicated affiliation strings. Output is published as a Kaggle dataset.
 
-**Part of [LabID](https://github.com/labid-base)** — an open knowledge graph of research laboratories.
-
 ---
 
 ## Scripts
@@ -65,13 +63,6 @@ One row per authorship. Columns: `work_id`, `doi`, `title`, `type`, `language`, 
 
 Collected data is published on Kaggle:
 **[emirhanserbest/openalex-affiliation-dataset](https://www.kaggle.com/datasets/emirhanserbest/openalex-affiliation-dataset)**
-
----
-
-## Next step: NER
-
-To run AffilGood NER on the unique affiliation strings and prepare annotation tasks for Label Studio, see:
-**[labid-base/LabNER](https://github.com/labid-base/LabNER)**
 
 ---
 
